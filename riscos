@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMENGO</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #flamengoText {
+            font-size: 5em;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: red;
+            text-shadow: 2px 2px 10px black, -2px -2px 10px black;
+            z-index: 2;
+            display: none;
+            position: absolute;
+            transform: rotateY(45deg) translateZ(50px);
+            text-align: center;
+            animation: reveal 2s ease-in-out;
+        }
+
+        @keyframes reveal {
+            from {
+                opacity: 0;
+                transform: rotateY(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: rotateY(0deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+    <div id="flamengoText">FLAMENGO</div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const flamengoText = document.getElementById('flamengoText');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const maxStrikes = 300;
+        let strikes = 0;
+        const colors = ["#FF0000", "#000000"]; // Vermelho e preto
+
+        // Função para desenhar riscos
+        function drawStrike() {
+            const x1 = Math.random() * canvas.width;
+            const y1 = Math.random() * canvas.height;
+            const x2 = Math.random() * canvas.width;
+            const y2 = Math.random() * canvas.height;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = Math.random() * 10 + 2;
+            ctx.stroke();
+
+            strikes++;
+
+            if (strikes >= maxStrikes) {
+                showFlamengoText(); // Exibe o texto "FLAMENGO" em 3D
+            }
+        }
+
+        // Função que exibe o texto "FLAMENGO" ao final
+        function showFlamengoText() {
+            flamengoText.style.display = 'block'; // Exibe o texto "FLAMENGO"
+        }
+
+        // Função que inicia o efeito
+        function startEffect() {
+            const interval = setInterval(() => {
+                drawStrike(); // Cria riscos aleatórios
+                
+                if (strikes >= maxStrikes) {
+                    clearInterval(interval); // Para após atingir o máximo de riscos
+                }
+            }, 50); // Intervalo de 50ms entre os riscos
+        }
+
+        // Evento de clique para iniciar o efeito
+        document.body.addEventListener('click', () => {
+            if (strikes === 0) { // Inicia o efeito apenas uma vez
+                startEffect();
+            }
+        });
+    </script>
+
+</body>
+</html>
